@@ -1,0 +1,18 @@
+project:
+  name: retail-shelf-shampoo
+
+paths:
+  root: null  # resolved at runtime to repo root
+  data_raw: data/raw_images
+  data_processed: data/processed
+  data_external: data/external
+  models_weights: models/weights
+  models_configs: models/configs
+  outputs_predictions: outputs/predictions
+  outputs_metrics: outputs/metrics
+
+device:
+  prefer: auto  # auto | cuda | cpu
+
+training:
+  seed: 42

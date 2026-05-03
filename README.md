@@ -1,0 +1,1 @@
+Environment setup and readiness check for the project.
