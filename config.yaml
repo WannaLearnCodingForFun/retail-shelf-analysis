@@ -16,3 +16,78 @@ device:
 
 training:
   seed: 42
+
+phase1:
+  sku110k:
+    url: http://trax-geometry.s3.amazonaws.com/cvpr_challenge/SKU110K_fixed.tar.gz
+    external_dir: data/external/SKU-110K
+    processed_dir: data/processed/sku110k
+    yolo_yaml: data/processed/sku110k/SKU-110K.yaml
+    epochs: 1
+    imgsz: 640
+    batch: 8
+    fraction: 0.02
+    workers: 4
+    model: yolov8n.pt
+
+phase2:
+  grozi120:
+    roboflow:
+      workspace: retvispublic-dutr5
+      project: grozi120
+      version: 1
+      format: yolov8
+    external_dir: data/external/grozi120
+    processed_dir: data/processed/grozi120
+    yolo_yaml: data/processed/grozi120/grozi_product.yaml
+    epochs: 1
+    imgsz: 640
+    batch: 8
+    fraction: 1.0
+    workers: 4
+
+phase3:
+  custom_dataset:
+    source_dir: data/raw_images
+    fallback_source_dir: raw_images
+    dataset_dir: data/processed/shampoo_dataset
+    data_yaml: data/processed/shampoo_dataset/data.yaml
+    split:
+      train: 0.7
+      val: 0.2
+      test: 0.1
+    detect_conf: 0.25
+    detect_iou: 0.5
+    detect_imgsz: 640
+
+phase4:
+  final_training:
+    output_weights: models/weights/shampoo_model.pt
+    init_weights: models/weights/detector_enriched.pt
+    epochs: 20
+    imgsz: 640
+    batch: 8
+    fraction: 1.0
+    workers: 4
+    run_name: shampoo_final
+    run_project: outputs/metrics/final
+
+classes:
+  names:
+    - head_shoulders
+    - pantene
+    - dove
+    - sunsilk
+    - others
+
+inference:
+  defaults:
+    confidence_threshold: 0.45
+    iou_threshold: 0.5
+    image_size: 960
+    max_detections: 100
+    detector_min_conf: 0.35
+    clip_min_conf: 0.28
+    min_box_area_ratio: 0.0015
+  weights:
+    detector: models/weights/shampoo_detector.pt

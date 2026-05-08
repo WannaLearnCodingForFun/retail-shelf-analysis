@@ -10,17 +10,15 @@ Thumbs.db
 
 .env
 .env.*
-kaggle.json
-.kaggle/
 
-data/processed/
-data/external/
+data/
 
 outputs/
 runs/
 wandb/
 logs/
 *.pth
+*.pt
 *.onnx
 .vscode/
 .idea/
