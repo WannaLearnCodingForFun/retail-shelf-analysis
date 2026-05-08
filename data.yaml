@@ -1,6 +1,0 @@
-# Populated in Phase 4/5; placeholder for YOLO train
-path: dataset
-train: images/train
-val: images/val
-test: images/test
-names: {}

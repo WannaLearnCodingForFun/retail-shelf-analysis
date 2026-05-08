@@ -75,6 +75,13 @@ st.image(img_rgb, caption="Detected products with brand overlays", use_container
 
 det_df = pd.DataFrame(result["detections"])
 total_products = int(result.get("total_products", len(det_df)))
+presence_rank = list(result.get("brand_presence_ranking", []))
+if not presence_rank:
+    bp = result.get("brand_presence", {})
+    if isinstance(bp, dict) and bp:
+        presence_rank = sorted([(str(k), float(v)) for k, v in bp.items()], key=lambda kv: kv[1], reverse=True)
+if not presence_rank:
+    presence_rank = [(b, 0.0) for b in classes]
 dominant_brand = str(result["insights"].get("dominant_brand", "others"))
 dominant_share = float(result["insights"].get("dominant_share", 0.0))
 avg_conf = float(result.get("avg_confidence", 0.0))
@@ -86,6 +93,26 @@ c1.metric("Total products", total_products)
 c2.metric("Dominant brand", dominant_brand, f"{dominant_share:.2f}%")
 c3.metric("Avg confidence", f"{avg_conf:.2f}")
 c4.metric("Unique brands", unique_brands)
+
+st.subheader("Detected Brand Presence")
+if presence_rank:
+    presence_df = pd.DataFrame(presence_rank, columns=["brand", "score"])
+    presence_df["confidence"] = presence_df["score"].map(lambda v: f"{float(v):.2f}")
+    presence_df = presence_df[presence_df["brand"].isin(["head_shoulders", "pantene", "dove", "sunsilk", "others"])]
+    st.dataframe(presence_df[["brand", "confidence"]], use_container_width=True, hide_index=True)
+else:
+    st.info("No brand presence ranking available.")
+
+with st.expander("Debug Brand Scores", expanded=False):
+    dbg = result.get("debug_score_summary", {})
+    if isinstance(dbg, dict) and dbg:
+        for key in ["full_scores", "regional_scores_mean", "expanded_scores_mean", "fused_scores_pre_norm", "brand_presence"]:
+            vals = dbg.get(key, {})
+            if isinstance(vals, dict) and vals:
+                st.caption(key.replace("_", " ").title())
+                sdf = pd.DataFrame({"brand": list(vals.keys()), "score": list(vals.values())}).sort_values("score", ascending=False)
+                st.dataframe(sdf, use_container_width=True, hide_index=True)
+    st.caption(f"Raw debug file: {result.get('debug_scores_path', 'n/a')}")
 
 shelf = result["shelf_share"]
 st.subheader("Shelf share")
