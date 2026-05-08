@@ -1,49 +1,121 @@
-# Retail Shelf Intelligence (Shampoo)
+## Retail Shelf Intelligence for Shampoo Brands
 
-Stable demo pipeline:
+An AI-powered retail analytics system that analyzes shampoo shelf images to detect products, identify major brands, estimate shelf share, and generate business insights through an interactive dashboard.
 
-Shelf image -> YOLO bottle detector -> bottle crops -> CLIP zero-shot brand classification -> shelf analytics -> Streamlit/FastAPI output.
+## Features
 
-Supported brands:
+* Shampoo bottle detection using YOLOv8
+* Brand recognition using CLIP zero-shot classification
+* Shelf-share estimation based on occupied shelf area
+* Facing count analytics
+* Shelf position analysis (top / middle / bottom)
+* Interactive Streamlit dashboard
+* FastAPI backend for API-based inference
+* Clean visual analytics and annotated detections
 
-- `head_shoulders`
-- `pantene`
-- `dove`
-- `sunsilk`
-- `others`
+## Supported Brands
 
-## Quick Start (First Run)
+* Head & Shoulders
+* Pantene
+* Dove
+* Sunsilk
+* Others
+
+## System Pipeline
+
+Shelf Image
+→ Bottle Detection
+→ Product Cropping
+→ Brand Classification
+→ Shelf Analytics
+→ Interactive Dashboard
+
+## Project Structure
+
+```bash
+project_root/
+├── app/
+├── data/
+├── models/
+├── outputs/
+├── src/
+├── requirements.txt
+└── README.md
+```
+
+## Quick Start
+
+### 1. Create Virtual Environment
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
+```
+
+### 2. Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
+
+### 3. Launch Streamlit Dashboard
+
+```bash
 streamlit run app/frontend/app.py
 ```
 
 ## Backend API
 
+Run the FastAPI server:
+
 ```bash
 uvicorn app.backend.main:app --reload --port 8000
 ```
 
-`POST /analyze` with an image file returns:
+API endpoint:
 
-- detections
-- shelf share and facings
-- shelf zones
-- insights summary
-- preview image path
+```bash
+POST /analyze
+```
 
-## Runtime Notes
+Returns:
 
-- Detector defaults are fixed internally for stability:
-  - confidence `0.45`
-  - IoU `0.5`
-  - image size `960`
-  - max detections `100`
-- Detections below `0.35` are discarded.
-- If `models/weights/shampoo_detector.pt` is unavailable, inference falls back to available local detector weights, then `yolov8m.pt`.
-- Outputs are written to:
-  - `outputs/predictions/`
-  - `outputs/metrics/`
+* detections
+* shelf share
+* facing counts
+* shelf zones
+* insights
+* annotated image path
+
+## Outputs
+
+Generated results are stored in:
+
+```bash
+outputs/predictions/
+outputs/metrics/
+```
+
+## Technologies Used
+
+* Python
+* PyTorch
+* YOLOv8
+* OpenAI CLIP
+* Streamlit
+* FastAPI
+* Plotly
+
+## Notes
+
+* The system is optimized for retail shelf images containing shampoo products.
+* Core brands are prioritized for more stable predictions.
+* The project is designed for fast inference and demo reliability.
+
+## Future Improvements
+
+* Improved multi-brand recognition
+* OCR-assisted brand matching
+* Better shelf segmentation
+* Real-time video inference
+* Advanced retail analytics
