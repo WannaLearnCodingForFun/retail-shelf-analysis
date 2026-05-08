@@ -106,16 +106,18 @@ outputs/metrics/
 * FastAPI
 * Plotly
 
+## Screenshots
+<img width="1470" height="798" alt="image" src="https://github.com/user-attachments/assets/279e8de6-55c1-4a52-a626-f10f60139fa5" />
+<img width="1212" height="625" alt="image" src="https://github.com/user-attachments/assets/8dc9ab83-ac44-4588-95c2-b2438d47f0f4" />
+<img width="1464" height="747" alt="image" src="https://github.com/user-attachments/assets/bba667bb-3d6a-4da7-a2e1-97b901e33248" />
+
+
+
+
 ## Notes
 
 * The system is optimized for retail shelf images containing shampoo products.
 * Core brands are prioritized for more stable predictions.
 * The project is designed for fast inference and demo reliability.
 
-## Future Improvements
 
-* Improved multi-brand recognition
-* OCR-assisted brand matching
-* Better shelf segmentation
-* Real-time video inference
-* Advanced retail analytics
